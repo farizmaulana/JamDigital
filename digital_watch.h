@@ -1,152 +1,45 @@
-//File : digital_watch.c
+//File : digital_watch.h
+//merujuk pada :
+	/*
+		File: fsm.h
+		Author: waskita
+		Created on March 6, 2011, 5:45 PM
+	*/
 
-#include "digital_watch.h"
 
-//********************************************************************************************
-//Implementasi bahasa C dari state chart jam tangan digital
+#ifndef DIGITAL_WATCH_H
+#define DIGITAL_WATCH_H
 
-void digital_watch_on(int *state, int *substate, int *input, int *hour, int *minute, int *second, int *day, int *month, int *year)
+#ifdef __cplusplus
+
+extern "C"
 {
+	#endif
 
-	if (*state == STATE_TIMEKEEPING) 
-	{
-		switch(*input)
-		{			
-			case EVT_SET:
-			{
-				*state = STATE_SETTING;
-				*substate = SUBSTATE_HOUR;
-				break;
-			}
+	#define NO_STATE			00
+	
+	#define STATE_TIMEKEEPING	11
+	#define STATE_SETTING 		21
+	
+	#define SUBSTATE_TIME		12
+	#define SUBSTATE_DATE		13
 
-			case EVT_MODE:
-			{
-				if (*substate == SUBSTATE_TIME)
-				{
-					*substate = SUBSTATE_DATE;
-					*state = STATE_TIMEKEEPING;
-				}
-				else if (*substate == SUBSTATE_DATE)
-				{
-					*substate = SUBSTATE_TIME;
-					*state = STATE_TIMEKEEPING;
-				}
-				break;
-			}
-		}
-	} 
-	else  if(*state == STATE_SETTING)
-	{
-		switch(*input)
-		{
-			case EVT_TICK:
-			{
-				*state = STATE_SETTING;
-				switch(*substate)
-				{
-					case (SUBSTATE_HOUR) :
-					{
-						*hour = *hour + 1;
-						break;
-					}
-					case (SUBSTATE_MINUTE):
-					{
-						*minute = *minute + 1;
-						break;
-					}
-					case (SUBSTATE_SECOND):
-					{
-						*second = *second + 1;
-						break;
-					}
-					case (SUBSTATE_DAY) :
-					{
-						*day = *day + 1;
-						break;
-					}
-					case (SUBSTATE_MONTH):
-					{
-						*month = *month + 1;
-						break;
-					}
-					case (SUBSTATE_YEAR):
-					{
-						*year = *year + 1;
-						break;
-					}
-				}
-				break;
-			}		
-			case EVT_SET:
-			{
-				if(*substate == SUBSTATE_TIME || *substate == SUBSTATE_HOUR || *substate == SUBSTATE_MINUTE || *substate == SUBSTATE_SECOND)
-				{
-					*substate = SUBSTATE_YEAR;
-					*state = STATE_SETTING;
-				}	
-				else if(*substate == SUBSTATE_DATE || *substate == SUBSTATE_YEAR || *substate == SUBSTATE_MONTH || *substate == SUBSTATE_DAY)
-				{
-					*state = STATE_TIMEKEEPING;
-					*substate = SUBSTATE_TIME;
-				}
-				break;
-			}
-			case EVT_MODE:
-			{
-				switch(*substate)
-				{
-					case (SUBSTATE_TIME):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_HOUR;
-						break;
-					}
-					case (SUBSTATE_HOUR):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_MINUTE;
-						break;
-					}
-					case (SUBSTATE_MINUTE):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_SECOND;
-						break;
-					}
-					case (SUBSTATE_SECOND):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_HOUR;
-						break;
-					}
-					case (SUBSTATE_DATE):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_YEAR;
-						break;
-					}
-					case (SUBSTATE_YEAR):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_MONTH;
-						break;
-					}
-					case (SUBSTATE_MONTH):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_DAY;
-						break;
-					}
-					case (SUBSTATE_DAY):
-					{
-						*state = STATE_SETTING;
-						*substate = SUBSTATE_YEAR;
-						break;
-					}
-				}
-			}
-		}
-	}
+	#define SUBSTATE_HOUR 		22
+	#define SUBSTATE_MINUTE		23
+	#define SUBSTATE_SECOND		24
+	#define SUBSTATE_YEAR		25
+	#define SUBSTATE_MONTH		26
+	#define SUBSTATE_DAY 		27
+	
+	#define EVT_NONE			90
+	#define EVT_MODE			91
+	#define	EVT_SET				92
+	#define	EVT_TICK			93
+
+	void digital_watch_on(int *state, int *substate, int *input, int *hour, int *minute, int *second, int *day, int *month, int *year);
+	#ifdef __cplusplus
 }
 
+#endif
 
+#endif /* DIGITAL_WATCH_H */
